@@ -52,11 +52,11 @@ class NetworkConstants:
     @classmethod
     def set_mainnet(cls):
         cls.TESTNET = False
-        cls.WIF_PREFIX = 0x80
-        cls.ADDRTYPE_P2PKH = 0
-        cls.ADDRTYPE_P2SH = 5
+        cls.WIF_PREFIX = 'b7'
+        cls.ADDRTYPE_P2PKH = '1e'
+        cls.ADDRTYPE_P2SH = '33'
         cls.SEGWIT_HRP = "bc"
-        cls.GENESIS = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+        cls.GENESIS = "000003201729c2621caf1352ff8374472e2d2bf1762ae4dd3092189fe4cea9e0"
         cls.DEFAULT_PORTS = {'t': '50001', 's': '50002'}
         cls.DEFAULT_SERVERS = read_json('servers.json', {})
         cls.CHECKPOINTS = read_json('checkpoints.json', [])
@@ -108,7 +108,7 @@ NetworkConstants.set_mainnet()
 
 ################################## transactions
 
-COINBASE_MATURITY = 100
+COINBASE_MATURITY = 120
 COIN = 100000000
 
 # supported types of transction outputs
@@ -452,7 +452,7 @@ def base_encode(v, base):
         result.append(chars[mod])
         long_value = div
     result.append(chars[long_value])
-    # Bitcoin does a little leading-zero-compression:
+    # CrypticCoin does a little leading-zero-compression:
     # leading 0-bytes in the input become leading-1s
     nPad = 0
     for c in v:
@@ -639,7 +639,7 @@ from ecdsa.util import string_to_number, number_to_string
 
 def msg_magic(message):
     length = bfh(var_int(len(message)))
-    return b"\x18Bitcoin Signed Message:\n" + length + message
+    return b"\x18CrypticCoin Signed Message:\n" + length + message
 
 
 def verify_message(address, sig, message):
@@ -981,7 +981,7 @@ def xpub_from_xprv(xprv):
 
 
 def bip32_root(seed, xtype):
-    I = hmac.new(b"Bitcoin seed", seed, hashlib.sha512).digest()
+    I = hmac.new(b"CrypticCoin seed", seed, hashlib.sha512).digest()
     master_k = I[0:32]
     master_c = I[32:]
     K, cK = get_pubkeys_from_secret(master_k)
